@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/user/Login'
+import UserCenter from '../views/user/UserCenter'
+import EditBlog from '../views/user/EditBlog'
 
 Vue.use(VueRouter)
 
@@ -17,6 +19,16 @@ Vue.use(VueRouter)
     component: Login
   },
   {
+    path: '/UserCenter',
+    name: 'UserCenter',
+    component: UserCenter
+  },
+  {
+    path: '/EditBlog',
+    name: 'EditBlog',
+    component: EditBlog
+  },
+  {
     path: '/BlogInfo',
     name: 'BlogInfo',
     component: function () {
@@ -26,7 +38,7 @@ Vue.use(VueRouter)
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

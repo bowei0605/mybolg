@@ -5,7 +5,7 @@
                 <div class="white--text title">用心创作，与君同行</div>
             </div>
             <div class="loginInput white">
-                <div class="mx-10" style="margin-top: 60px">
+                <div class="mx-10" style="margin-top: 90px">
                     <div class="text-center title pb-12 primary--text font-weight-bold">
                         <span>后台登录</span>
                     </div>
@@ -34,12 +34,14 @@ export default {
     methods:{
         login(){
             let appUrl_login = this.APIUrl.API.api.userLogin;
-            this.$axios.post(appUrl_login,{ 
-                us: this.userName, 
+            this.$axios.post(appUrl_login,{
+                us: this.userName,
                 ps: this.userPwd
             }).then(res=>{
                 if(res.data.err == 0){
-                    alert(res.data.msg)
+                    localStorage.setItem('userName', this.userName)
+                    this.$router.push('/UserCenter')
+                    console.log('登录成功')
                 }else{
                     alert(res.data.msg)
                 }

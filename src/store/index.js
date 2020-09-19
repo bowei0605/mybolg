@@ -5,14 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isBlogInfo: false
+    isBlogInfo: false,
+    userName: ''
   },
   mutations: {
+    getUserName(state, msg){
+      state.userName = msg
+    }
   },
   actions: {
     goBlogInfo(index){
       this.state.isBlogInfo = index
-    }
+    },
   },
   modules: {
   }

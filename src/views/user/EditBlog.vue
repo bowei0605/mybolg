@@ -1,0 +1,159 @@
+<template>
+  <div>
+    <v-app-bar>
+        <v-row justify="center" class="ml-4" align="center">
+            <v-col cols="6" sm="8" md="7" xs="0" xl="6" class="pl-0">
+                <v-toolbar-title class="font-weight-black primary--text">Bowei</v-toolbar-title>
+            </v-col>
+            <v-col cols="6" sm="4" md="3" xs="12" xl="2" style="text-align:right;" class="d-flex justify-end align-center">
+                <v-btn text color="primary" rounded @click="goEditBlog()">你好，{{userName}}</v-btn>
+            </v-col>
+        </v-row>
+    </v-app-bar>
+    <v-row justify="center" class="mx-4 mt-10">
+        <v-col cols="12" sm="8" md="7" xs="12" xl="6">
+          <v-text-field label="请输入标题" solo v-model="blogTitle"></v-text-field>
+          <div class="subcontainer">
+            <div class="editor" id="editor" ref="editor"></div>
+            <v-btn @click="submitBlog()" width="120px" rounded color="primary" class="mt-7">提交</v-btn>
+          </div>
+        </v-col>
+        <v-col cols="0" sm="4" md="3" xs="0" xl="2">
+          <v-card class="mx-auto">
+              <v-card-subtitle class="pb-3 title">个人中心</v-card-subtitle>
+              <v-card-text class="text--primary">
+                  <div class="mb-2">网名：小诸葛</div>
+                  <div class="mb-2">职位：前端攻城狮</div>
+                  <div class="mb-2">现居：广东深圳</div>
+                  <div class="mb-2">Email：bowei0605@163.com</div>
+                  <div class="mb-2">QQ：2504779552</div>
+              </v-card-text>
+          </v-card>
+        </v-col>
+    </v-row>
+  </div>
+</template>
+
+<script>
+
+import E from "wangeditor";
+
+export default {
+  data() {
+    return {
+      activeName: "first",
+      txt: {
+        text: ""
+      },
+      userName: '',
+      editor: "", // 存放实例化的 wangEditor对象，在多个方法中使用
+      blogTitle: ''
+    };
+  },
+
+  mounted() {
+    this.userName = localStorage.getItem('userName');
+    this.editor = new E("#editor"); //new即可
+
+    this.editor.customConfig.uploadImgShowBase64 = false; // base 64 存储图片
+    // this.editor.customConfig.uploadImgServer = this.APIUrl.API.api + "/file/upload?hehe=educiot.png"; // 配置服务器端地址
+    this.editor.customConfig.uploadImgHeaders = {}; // 自定义 header
+    this.editor.customConfig.uploadFileName = "file"; // 后端接受上传文件的参数名
+    this.editor.customConfig.uploadImgMaxSize = 10 * 1024 * 1024; // 将图片大小限制为 10M
+    this.editor.customConfig.uploadImgMaxLength = 6; // 限制一次最多上传 3 张图片
+    this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000; // 设置超时时间
+    //下面的为一些配置参数，默认全部都有，我们需要那些留下那些即可
+    this.editor.customConfig.menus = [
+      "head", // 标题
+      "bold", // 粗体
+      "fontSize", // 字号
+      // "fontName", // 字体
+      "italic", // 斜体
+      "underline", // 下划线
+      "strikeThrough", // 删除线
+      "foreColor", // 文字颜色
+      "backColor", // 背景颜色
+      "link", // 插入链接
+      "list", // 列表
+      "justify", // 对齐方式
+    //   'quote',  // 引用
+    //   "emoticon", // 表情
+    //   "image", // 插入图片
+      // "table", // 表格
+    //   "video", // 插入视频
+      "code", // 插入代码
+      "undo", // 撤销
+      "redo" // 重复
+    ];
+    //聚焦时候函数
+    this.editor.customConfig.onfocus = function() {
+      //console.log("onfocus")
+    };
+    //失焦时候函数
+    this.editor.customConfig.onblur = function() {
+      //console.log("onblur")
+    };
+    //change事件，当富文本编辑器内容发生变化时便会触发此函数
+    this.editor.customConfig.onchange = function(text) {
+      console.log(text);
+    };
+    this.editor.create(); //以上配置完成之后调用其create()方法进行创建
+    this.editor.txt.html(""); //创建完成之后的默认内容
+  },
+
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+
+    submitBlog(){
+      let appUrl_blogAdd = this.APIUrl.API.api.blogAdd;
+        this.$axios.post(appUrl_blogAdd,{ 
+            us: localStorage.getItem('userName'), 
+            blogTitle: this.blogTitle,
+            blogContent: this.editor.txt.html(),
+        }).then(res=>{
+            if(res.data.err == 0){
+                alert('添加成功')
+                this.blogTitle = ''
+                this.editor.txt.html("");
+            }else{
+                alert(res.data.msg)
+            }
+            console.log(res.data)
+        }).catch(err=>{
+            console.log(err)
+      })
+    }
+  }
+};
+</script>
+
+<style lang="less" scoped>
+.subcontainer {
+  height: 100%;
+  width: 100%;
+  .tabs {
+    padding: 20px 0;
+  }
+}
+
+.editor {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 40px;
+}
+.a-btn {
+  padding-bottom: 80px;
+}
+.a-btn a {
+  display: block;
+  color: #fff;
+  font-size: 16px;
+  line-height: 30px;
+  width: 100px;
+  text-align: center;
+  float: right;
+  background: dodgerblue;
+}
+</style>
