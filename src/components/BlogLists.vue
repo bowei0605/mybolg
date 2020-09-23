@@ -1,13 +1,13 @@
 <template>
   <div>
       <v-row dense class="mx-auto">
-          <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item._id)">
-              <v-card :color="item.color" dark>
-                  <v-card-title v-text="item.blogTitle"></v-card-title>
-                  <v-card-subtitle v-html="item.blogContent" class="text-over"></v-card-subtitle>
+          <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3">
+              <v-card elevation='1'>
+                  <v-card-title v-text="item.blogTitle" class="primary--text text--darken-2" @click="goBlogInfo(item._id)"></v-card-title>
+                  <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
                   <v-card-actions class="justify-space-between mr-3">
                     <v-btn text>Listen Now</v-btn>
-                    <span>{{ item.updateTime }}</span>
+                    <span class="body-2 grey--text">{{ item.updateTime | timeFilters}}</span>
                   </v-card-actions>
               </v-card>
           </v-col>
@@ -22,15 +22,14 @@
     mounted () {
       this.getAllBlogs()
     },
+    filters:{
+      timeFilters(value){
+        return value.substring(0,10) + ' ' + value.substring(11,19)
+      }
+    },
     methods: {
       goBlogInfo(blogId){
-        console.log(blogId)
-        this.$router.push({
-          name: 'BlogInfo',
-          params: {
-            blogId
-          }
-        })
+        this.$router.push('./BlogInfo?id=' + blogId)
       },
       getAllBlogs(){
         let appUrl_getAllBlogs =  this.APIUrl.API.api.blogGetInfoByPage
@@ -61,6 +60,6 @@
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
-    max-height: 40px;
+    max-height: 20px;
   }
 </style>

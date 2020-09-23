@@ -5,11 +5,18 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import api from './api/api'
 import axios from 'axios'
-
 Vue.prototype.APIUrl=api;
+
 Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
+
+// Vue.directive('highlight',function (el) {
+//   let blocks = el.querySelectorAll('pre code');
+//       blocks.forEach((block)=>{
+//       hljs.highlightBlock(block)
+//   })
+// })
 
 new Vue({
   router,

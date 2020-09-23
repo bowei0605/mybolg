@@ -14,7 +14,7 @@
         <v-col cols="12" sm="8" md="7" xs="12" xl="6">
           <v-text-field label="请输入标题" solo v-model="blogTitle"></v-text-field>
           <div class="subcontainer">
-            <div class="editor" id="editor" ref="editor"></div>
+            <div class="editor" id="editor" ref="editor" v-highlight></div>
             <v-btn @click="submitBlog()" width="120px" rounded color="primary" class="mt-7">提交</v-btn>
           </div>
         </v-col>
@@ -47,21 +47,28 @@ export default {
       },
       userName: '',
       editor: "", // 存放实例化的 wangEditor对象，在多个方法中使用
-      blogTitle: ''
+      blogTitle: '',
+
+      blogInfo:'',
     };
   },
 
   mounted() {
+    // 接受参数
     this.userName = localStorage.getItem('userName');
+
+    
+
     this.editor = new E("#editor"); //new即可
 
     this.editor.customConfig.uploadImgShowBase64 = false; // base 64 存储图片
-    // this.editor.customConfig.uploadImgServer = this.APIUrl.API.api + "/file/upload?hehe=educiot.png"; // 配置服务器端地址
+    this.editor.customConfig.uploadImgServer = this.APIUrl.API.api.blogUpload; // 配置服务器端地址
     this.editor.customConfig.uploadImgHeaders = {}; // 自定义 header
-    this.editor.customConfig.uploadFileName = "file"; // 后端接受上传文件的参数名
+    this.editor.customConfig.uploadFileName = "images"; // 后端接受上传文件的参数名
     this.editor.customConfig.uploadImgMaxSize = 10 * 1024 * 1024; // 将图片大小限制为 10M
     this.editor.customConfig.uploadImgMaxLength = 6; // 限制一次最多上传 3 张图片
     this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000; // 设置超时时间
+    this.editor.customConfig.debug = true
     //下面的为一些配置参数，默认全部都有，我们需要那些留下那些即可
     this.editor.customConfig.menus = [
       "head", // 标题
@@ -78,7 +85,7 @@ export default {
       "justify", // 对齐方式
     //   'quote',  // 引用
     //   "emoticon", // 表情
-    //   "image", // 插入图片
+      "image", // 插入图片
       // "table", // 表格
     //   "video", // 插入视频
       "code", // 插入代码
@@ -97,8 +104,38 @@ export default {
     this.editor.customConfig.onchange = function(text) {
       console.log(text);
     };
+
+    this.editor.customConfig.uploadImgHooks = {
+      fail: (xhr, editor, result)=>{
+        console.log('Images upload failed')
+      },
+      success: (xhr, editor, res) =>{
+        
+        console.log(editor, res)
+        console.log('Image upload success')
+      },
+      timeout: (xhr, editor) => {
+        console.log('Image upload timeout')
+      },
+      customInsert: (insertImg, result, editor) => {
+        var url = this.APIUrl.API.api.hostIp + result.images[0]
+        insertImg(url)
+        console.log("url:", url)
+        console.log('insertImg：', insertImg)
+        console.log('result：', result)
+        console.log('editor:', editor)
+      }
+    }
+
     this.editor.create(); //以上配置完成之后调用其create()方法进行创建
     this.editor.txt.html(""); //创建完成之后的默认内容
+
+    if(this.$route.params.blogInfo){
+      this.blogInfo = this.$route.params.blogInfo
+      this.blogTitle = this.blogInfo.blogTitle
+      this.editor.txt.html(this.blogInfo.blogContent); //创建完成之后的默认内容
+    }
+
   },
 
   methods: {
@@ -107,24 +144,51 @@ export default {
     },
 
     submitBlog(){
-      let appUrl_blogAdd = this.APIUrl.API.api.blogAdd;
-        this.$axios.post(appUrl_blogAdd,{ 
-            us: localStorage.getItem('userName'), 
-            blogTitle: this.blogTitle,
-            blogContent: this.editor.txt.html(),
-        }).then(res=>{
-            if(res.data.err == 0){
-                alert('添加成功')
-                this.blogTitle = ''
-                this.editor.txt.html("");
-            }else{
-                alert(res.data.msg)
-            }
-            console.log(res.data)
-        }).catch(err=>{
-            console.log(err)
-      })
+      // 判断是修改还是添加
+      if(this.$route.params.blogInfo){
+        // 这是修改
+        console.log('修改博客')
+        let appUrl_blogUpdata = this.APIUrl.API.api.blogUpdate;
+        this.$axios.post(appUrl_blogUpdata,{
+          us: localStorage.getItem('userName'),
+          blogTitle: this.blogTitle,
+          blogContent: this.editor.txt.html()
+        }).then(res =>{
+          if(res.data.err == 0){
+              console.log('修改成功')
+              this.blogTitle = ''
+              this.editor.txt.html("");
+              this.$router.go(-1)
+          }else{
+              alert(res.data.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }else{
+        // 这是添加
+        let appUrl_blogAdd = this.APIUrl.API.api.blogAdd;
+          this.$axios.post(appUrl_blogAdd,{ 
+              us: localStorage.getItem('userName'), 
+              blogTitle: this.blogTitle,
+              blogContent: this.editor.txt.html(),
+          }).then(res=>{
+              if(res.data.err == 0){
+                  console.log('添加成功')
+                  this.blogTitle = ''
+                  this.editor.txt.html("");
+                  this.$router.go(-1)
+              }else{
+                  alert(res.data.msg)
+              }
+              console.log(res.data)
+          }).catch(err=>{
+              console.log(err)
+        })
+      }
+      
     }
+
   }
 };
 </script>
