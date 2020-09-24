@@ -148,8 +148,10 @@ export default {
       if(this.$route.params.blogInfo){
         // 这是修改
         console.log('修改博客')
+      console.log(this.blogInfo)
         let appUrl_blogUpdata = this.APIUrl.API.api.blogUpdate;
         this.$axios.post(appUrl_blogUpdata,{
+          _id: this.blogInfo._id,
           us: localStorage.getItem('userName'),
           blogTitle: this.blogTitle,
           blogContent: this.editor.txt.html()

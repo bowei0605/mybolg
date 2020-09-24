@@ -12,7 +12,7 @@
 
                     <div style="position: relative;">
                         <v-text-field label="请输入邮箱号" solo v-model="userName"></v-text-field>
-                        <v-btn text color="primary" rounded style="position: absolute; right: 0;top:6px" @click="sendCode()" v-if="!isLogin">获取验证码</v-btn>
+                        <v-btn text color="primary" rounded style="position: absolute; right: 0;top:6px" :disabled="second != 0" @click="sendCode()" v-if="!isLogin">{{second?(second+'S后重试'):'获取验证码'}}</v-btn>
                     </div>
 
                     <v-text-field label="请输入验证码" solo v-model="code" v-if="!isLogin  && regStep == 1"></v-text-field>
@@ -50,6 +50,7 @@ export default {
             code: '',
 
             regStep: 1,
+            second: 0
         }
     },
     methods:{
@@ -67,20 +68,31 @@ export default {
                 }else{
                     alert(res.data.msg)
                 }
-                console.log(res.data)
             }).catch(err=>{
+                console.log(123)
                 console.log(err)
             })
         },
 
         // 发送邮箱验证码
         sendCode(){
+
             let appUrl_getCode = this.APIUrl.API.api.userGetMailCode;
             this.$axios.post(appUrl_getCode,{
                 mail: this.userName
             }).then(res=>{
                 if(res.data.err == 0){
                     console.log('发送成功')
+
+                    this.second = 60
+                    clearInterval(tv)
+                    var tv = setInterval(() => {
+                        this.second--;
+                        if(this.second == 0){
+                            clearInterval(tv)
+                        }
+                    }, 1000);
+
                 }else{
                     console.log('发送失败')
                 }
@@ -120,6 +132,7 @@ export default {
             }).then(res=>{
                 if(res.data.err == 0){
                     console.log('注册成功')
+                    this.login()
                 }else{
                     console.log('注册失败')
                 }

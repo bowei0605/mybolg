@@ -39,7 +39,7 @@
         }).then(res=>{
             if(res.data.err == 0){
               this.blogList = res.data.list
-              console.log(res.data.list)
+              // console.log(res.data.list)
             }else{
               alert(res.data.msg)
             }

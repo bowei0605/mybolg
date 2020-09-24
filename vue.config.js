@@ -7,8 +7,7 @@ module.exports = {
   publicPath: './',
   outputDir: 'www',
   devServer: {
-    port: 3000,
-    // https: true
+    port: 4000,
   },
   productionSourceMap: false,
   configureWebpack: {

@@ -6,10 +6,22 @@
         </div>
         <div class="mt-1 mr-3 mb-4 grey--text d-flex justify-space-between align-center">
             <div class="body-2">{{blogInfo.updateTime | timeFilters}}</div>
-            <div @click="delBlog()"  v-if="isAdmin">删除文章</div>
+            <div @click="deleteBlogDialog=true"  v-if="isAdmin">删除文章</div>
         </div>
         <div class="text-h6 mb-4 mt-2">{{blogInfo.blogTitle}}</div>
         <div v-html="blogInfo.blogContent"></div>
+        <!-- determineDeleteBlog -->
+        <v-dialog v-model="deleteBlogDialog" persistent max-width="290">
+            <v-card>
+                <v-card-title class="title">确定删除此博客？</v-card-title>
+                <!-- <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text> -->
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                    <v-btn color="primary" rounded text @click="deleteBlogDialog = false">取消</v-btn>
+                    <v-btn color="primary" rounded text @click="delBlog()">确定</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
@@ -17,7 +29,8 @@ export default {
     data () {
         return {
             blogInfo:[],
-            isAdmin: false
+            isAdmin: false,
+            deleteBlogDialog: false,
         }
     },
     created () {
@@ -36,10 +49,9 @@ export default {
             }).then(res => {
                 if(res.data.err == 0){
                     this.blogInfo = res.data.list[0]
-                    if(localStorage.getItem('userName')){
-                        if(localStorage.getItem('userName') == this.blogInfo.us){
-                            this.isAdmin = true
-                        }
+                    if(!localStorage.getItem('userName')) return;
+                    if(localStorage.getItem('userName') == this.blogInfo.us){
+                        this.isAdmin = true
                     }
                 }
             }).catch(err => {

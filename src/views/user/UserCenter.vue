@@ -21,7 +21,7 @@
                           <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0"></v-card-subtitle>
                           <v-card-actions class="justify-space-between mr-3">
                               <v-btn text>Listen Now</v-btn>
-                              <span>{{ item.updateTime }}</span>
+                              <span class="body-2 grey--text">{{ item.updateTime | timeFilters}}</span>
                           </v-card-actions>
                       </v-card>
                   </v-col>
@@ -53,6 +53,11 @@
       this.userName = localStorage.getItem('userName');
       this.getBlogList();
       this.getUserInfo();
+    },
+    filters:{
+      timeFilters(value){
+        return value.substring(0,10) + ' ' + value.substring(11,19)
+      }
     },
     methods: {
       // 获取用户信息

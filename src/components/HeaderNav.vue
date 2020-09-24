@@ -5,11 +5,11 @@
         </v-col>
         <v-col cols="6" sm="4" md="3" xs="12" xl="2" style="text-align:right;" class="d-flex justify-end align-center">
             <div v-if="!userName">
-                <v-btn text color="primary" rounded @click="goLogin()">登录</v-btn>
-                <v-btn text color="primary" rounded @click="login()">注册</v-btn>
+                <v-btn text color="primary" rounded @click="goLogin()">登录 / 注册</v-btn>
             </div>
             <div v-else>
-                <v-btn text color="primary" rounded @click="goEditBlog()">你好，{{this.userName}}</v-btn>
+                <v-btn text color="primary" rounded @click="goEditBlog()">写博客</v-btn>
+                <v-btn text color="primary" rounded @click="goUserCenter()">你好，{{this.userName}}</v-btn>
             </div>
             
         </v-col>
@@ -29,12 +29,15 @@ export default {
         goLogin(){
             this.$router.push('/Login')
         },
-        goEditBlog(){
+        goUserCenter(){
             this.$router.push('/UserCenter')
         },
         goHome(){
             this.$router.replace('/')
-        }
+        },
+        goEditBlog(){
+            this.$router.push('/EditBlog')
+        },
     }
 }
 </script>
