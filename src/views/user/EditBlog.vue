@@ -1,14 +1,7 @@
 <template>
   <div>
-    <v-app-bar>
-        <v-row justify="center" class="ml-4" align="center">
-            <v-col cols="6" sm="8" md="7" xs="0" xl="6" class="pl-0">
-                <v-toolbar-title class="font-weight-black primary--text">Bowei</v-toolbar-title>
-            </v-col>
-            <v-col cols="6" sm="4" md="3" xs="12" xl="2" style="text-align:right;" class="d-flex justify-end align-center">
-                <v-btn text color="primary" rounded @click="goEditBlog()">你好，{{userName}}</v-btn>
-            </v-col>
-        </v-row>
+    <v-app-bar app color="white" elevate-on-scroll>
+      <HeaderNav />
     </v-app-bar>
     <v-row justify="center" class="mx-4 mt-10">
         <v-col cols="12" sm="8" md="7" xs="12" xl="6">
@@ -35,9 +28,8 @@
 </template>
 
 <script>
-
 import E from "wangeditor";
-
+import HeaderNav from '@/components/HeaderNav'
 export default {
   data() {
     return {
@@ -51,6 +43,9 @@ export default {
 
       blogInfo:'',
     };
+  },
+  components: {
+    HeaderNav
   },
 
   mounted() {

@@ -11,14 +11,14 @@
                     </div>
 
                     <div style="position: relative;">
-                        <v-text-field label="请输入邮箱号" solo v-model="userName"></v-text-field>
-                        <v-btn text color="primary" rounded style="position: absolute; right: 0;top:6px" :disabled="second != 0" @click="sendCode()" v-if="!isLogin">{{second?(second+'S后重试'):'获取验证码'}}</v-btn>
+                        <v-text-field label="请输入邮箱号" @input="checkLoginInput()" solo v-model="userName"></v-text-field>
+                        <v-btn text color="primary" rounded style="position: absolute; right: 0;top:6px" :disabled="getCodeBtnDis" @click="sendCode()" v-if="!isLogin && regStep == 1">{{second?(second+'S后重试'):'获取验证码'}}</v-btn>
                     </div>
 
-                    <v-text-field label="请输入验证码" solo v-model="code" v-if="!isLogin  && regStep == 1"></v-text-field>
+                    <v-text-field label="请输入验证码" solo v-model="code" @input="checkNextInput()" v-if="!isLogin  && regStep == 1"></v-text-field>
 
-                    <v-text-field label="密码" v-if="isLogin" solo v-model="userPwd" @click:append="showPassword = !showPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"  :type="showPassword ? 'text' : 'password'"></v-text-field>
-                    <v-text-field label="密码" v-else-if="!isLogin && regStep == 2" solo v-model="userPwd" @click:append="showPassword = !showPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"  :type="showPassword ? 'text' : 'password'"></v-text-field>
+                    <v-text-field label="密码" v-if="isLogin" solo v-model="userPwd" @click:append="showPassword = !showPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"  :type="showPassword ? 'text' : 'password'" @input="checkLoginInput()"></v-text-field>
+                    <v-text-field label="密码" v-else-if="!isLogin && regStep == 2" solo v-model="userPwd" @click:append="showPassword = !showPassword" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"  :type="showPassword ? 'text' : 'password'"  @input="checkLoginInput()"></v-text-field>
                     
                     <div class="caption primary--text text-end"  v-if="isLogin">
                         <v-btn text rounded color="primary" @click="isLogin = false">还没账号？点击注册</v-btn>
@@ -27,14 +27,24 @@
                         <v-btn text rounded color="primary" @click="isLogin = true">已有账号？点击登录</v-btn>
                     </div>
                     <div class="text-center pt-12">
-                        <v-btn class="primary" width="100%" rounded @click="login()" v-if="isLogin">登录</v-btn>
-                        <v-btn class="primary" width="100%" rounded @click="verCode()" v-else-if="!isLogin && regStep == 1">下一步</v-btn>
-                        <v-btn class="primary" width="100%" rounded @click="reg()" v-else-if="!isLogin && regStep == 2">注册</v-btn>
+                        <v-btn class="primary" width="100%" rounded @click="login()" v-if="isLogin" :disabled="loginBtnDis" :loading='loginBtnLoading'>登录</v-btn>
+                        <v-btn class="primary" width="100%" rounded @click="verCode()" v-else-if="!isLogin && regStep == 1"  :disabled="nextBtnDis" :loading='nextBtnLoading'>下一步</v-btn>
+                        <v-btn class="primary" width="100%" rounded @click="reg()" v-else-if="!isLogin && regStep == 2" :disabled="regBtnDis" :loading='regBtnLoading'>注册</v-btn>
                     </div>
                 </div>
-                
             </div>
         </div>
+
+        <v-dialog v-model="dialog" max-width="290" persistent>
+            <v-card>
+                <div class="body-1 text-center py-6 grey--text text--darken-2" v-text="dialogText"></div>
+                <v-divider></v-divider> 
+                <v-btn color="primary" text x-large @click="dialog = false" style="width: 100%; height: 50px;">
+                    确定
+                </v-btn>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -50,10 +60,56 @@ export default {
             code: '',
 
             regStep: 1,
-            second: 0
+            second: 0,
+
+            nextBtnDis:true,
+            nextBtnLoading: false,
+            getCodeBtnDis: true,
+
+            regBtnDis:true,
+            regBtnLoading: false,
+
+            loginBtnDis:true,
+            loginBtnLoading: false,
+
+            dialog: false,
+            dialogText: ''
         }
     },
     methods:{
+
+        checkLoginInput(){
+            if(this.checkUsername() && this.userPwd){
+                this.loginBtnDis = false
+                this.regBtnDis = false
+            }else{
+                this.loginBtnDis = true
+                this.regBtnDis = true
+            }
+        },
+
+        checkNextInput(){
+            if(this.checkUsername() && this.code){
+                this.nextBtnDis = false
+            }else{
+                this.nextBtnDis = true
+            }
+        },
+
+        checkUsername(){
+            var myreg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+            if (!myreg.test(this.userName)) {
+                return false
+            } else {
+                if(this.second == 0){
+                    this.getCodeBtnDis = false
+                }else{
+                    this.getCodeBtnDis = true
+                }
+                return true
+            }
+        },
+
         // 登录页面
         login(){
             let appUrl_login = this.APIUrl.API.api.userLogin;
@@ -66,7 +122,8 @@ export default {
                     this.$router.replace('/UserCenter')
                     console.log('登录成功')
                 }else{
-                    alert(res.data.msg)
+                    this.dialog = true
+                    this.dialogText = res.data.msg
                 }
             }).catch(err=>{
                 console.log(123)
@@ -82,21 +139,29 @@ export default {
                 mail: this.userName
             }).then(res=>{
                 if(res.data.err == 0){
-                    console.log('发送成功')
+                    this.dialog = true
+                    this.dialogText = "已发送验证码，请注意查收"
+                    setTimeout(() => {
+                        this.dialog = false
+                    }, 3000);
 
                     this.second = 60
+                    this.getCodeBtnDis = true
                     clearInterval(tv)
                     var tv = setInterval(() => {
-                        this.second--;
+                        --this.second;
                         if(this.second == 0){
+                            this.getCodeBtnDis = false
                             clearInterval(tv)
+                        }else{
+                            this.getCodeBtnDis = true
                         }
                     }, 1000);
 
                 }else{
-                    console.log('发送失败')
+                    this.dialog = true
+                    this.dialogText = res.data.msg
                 }
-                console.log(res.data)
             }).catch(err=>{
                 console.log(err)
             })
@@ -114,9 +179,10 @@ export default {
                     this.regStep = 2
                     console.log('验证码正确')
                 }else{
-                    console.log('验证码错误')
+                    this.dialog = true
+                    this.dialogText = '验证码错误'
                 }
-                console.log(res.data)
+                // console.log(res.data)
             }).catch(err=>{
                 console.log(err)
             })
@@ -131,7 +197,6 @@ export default {
                 ps: this.userPwd
             }).then(res=>{
                 if(res.data.err == 0){
-                    console.log('注册成功')
                     this.login()
                 }else{
                     console.log('注册失败')

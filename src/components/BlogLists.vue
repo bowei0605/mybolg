@@ -1,16 +1,18 @@
 <template>
   <div>
       <v-row dense class="mx-auto">
-          <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3">
-              <v-card elevation='1'>
-                  <v-card-title v-text="item.blogTitle" class="primary--text text--darken-2" @click="goBlogInfo(item._id)"></v-card-title>
-                  <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
-                  <v-card-actions class="justify-space-between mr-3">
-                    <v-btn text>Listen Now</v-btn>
-                    <span class="body-2 grey--text">{{ item.updateTime | timeFilters}}</span>
-                  </v-card-actions>
-              </v-card>
-          </v-col>
+        <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" >
+          <v-hover v-slot:default="{ hover }" >
+            <v-card :elevation="hover ? 6 : 2">
+                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-2" @click="goBlogInfo(item._id)"></v-card-title>
+                <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
+                <v-card-actions class="justify-space-between mr-3">
+                  <v-btn text>Listen Now</v-btn>
+                  <span class="body-2 grey--text">{{ item.updateTime | timeFilters}}</span>
+                </v-card-actions>
+            </v-card>
+          </v-hover>
+        </v-col>
       </v-row>
   </div>
 </template>

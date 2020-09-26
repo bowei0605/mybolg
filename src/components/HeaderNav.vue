@@ -9,7 +9,7 @@
             </div>
             <div v-else>
                 <v-btn text color="primary" rounded @click="goEditBlog()">写博客</v-btn>
-                <v-btn text color="primary" rounded @click="goUserCenter()">你好，{{this.userName}}</v-btn>
+                <v-btn text color="primary" rounded @click="goUserCenter()">你好，{{this.userName | formatUserName}}</v-btn>
             </div>
             
         </v-col>
@@ -24,6 +24,13 @@ export default {
     },
     mounted(){
         this.userName = localStorage.getItem('userName');
+    },
+    filters: {
+        formatUserName: function (value) {
+            value = value.split('@')
+            console.log(value)
+            return value[0]
+        }
     },
     methods:{
         goLogin(){

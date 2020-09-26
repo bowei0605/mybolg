@@ -1,4 +1,4 @@
-let apiUrl = 'http://192.168.3.20:3000'
+let apiUrl = 'http://192.168.3.22:3000'
 // let apiUrl = 'http://bowei.xyz:3000'
 let API = {
     api:{
