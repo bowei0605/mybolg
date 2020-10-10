@@ -1,5 +1,5 @@
-let apiUrl = 'http://192.168.3.22:3000'
-// let apiUrl = 'http://bowei.xyz:3000'
+// let apiUrl = 'http://192.168.3.22:3000'
+let apiUrl = 'http://bowei.xyz:3000'
 let API = {
     api:{
         hostIp: apiUrl,
@@ -22,7 +22,9 @@ let API = {
         // 上传图片文件
         blogUpload: apiUrl + '/file/upload',                        // 文件上传
 
-
+        // 评论
+        commentPublish: apiUrl + '/comment/publish',                // 发表评论
+        getComment: apiUrl + '/comment/getInfoById',                // 查询评论
     }
 }
 

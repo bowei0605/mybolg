@@ -112,8 +112,8 @@ export default {
 
         // 登录页面
         login(){
-            let appUrl_login = this.APIUrl.API.api.userLogin;
-            this.$axios.post(appUrl_login,{
+            // let appUrl_login = this.APIUrl.API.api.userLogin;
+            this.$axios.post('/user/login',{
                 us: this.userName,
                 ps: this.userPwd
             }).then(res=>{
@@ -134,8 +134,8 @@ export default {
         // 发送邮箱验证码
         sendCode(){
 
-            let appUrl_getCode = this.APIUrl.API.api.userGetMailCode;
-            this.$axios.post(appUrl_getCode,{
+            // let appUrl_getCode = this.APIUrl.API.api.userGetMailCode;
+            this.$axios.post('/user/getMailCode',{
                 mail: this.userName
             }).then(res=>{
                 if(res.data.err == 0){
@@ -170,8 +170,8 @@ export default {
         // 校验 验证码页面
         verCode(){
             //userGetVerCode
-            let appUrl_verCode = this.APIUrl.API.api.userGetVerCode;
-            this.$axios.post(appUrl_verCode,{
+            // let appUrl_verCode = this.APIUrl.API.api.userGetVerCode;
+            this.$axios.post('/user/verCode',{
                 us: this.userName,
                 code: this.code
             }).then(res=>{
@@ -191,8 +191,8 @@ export default {
         // 注册页面
         reg(){
             //userReg
-            let appUrl_reg = this.APIUrl.API.api.userReg;
-            this.$axios.post(appUrl_reg,{
+            // let appUrl_reg = this.APIUrl.API.api.userReg;
+            this.$axios.post('/user/Reg',{
                 us: this.userName,
                 ps: this.userPwd
             }).then(res=>{

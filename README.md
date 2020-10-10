@@ -1,5 +1,7 @@
 # mybolg
 
+## 这是个人博客网站，可以给你们借鉴参考
+
 ## Project setup
 ```
 yarn install

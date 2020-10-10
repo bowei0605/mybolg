@@ -59,8 +59,8 @@ import HeaderNav from '@/components/HeaderNav'
     methods: {
       // 获取用户信息
       getUserInfo(){
-         let appUrl_getUserInfo = this.APIUrl.API.api.userGetInfo;
-         this.$axios.post(appUrl_getUserInfo,{
+        //  let appUrl_getUserInfo = this.APIUrl.API.api.userGetInfo;
+         this.$axios.post('/user/userGetInfo',{
            us: this.userName
          }).then(res =>{
             if(res.data.err == 0){
@@ -74,8 +74,8 @@ import HeaderNav from '@/components/HeaderNav'
       // 获取博客列表
       getBlogList(){
 
-        let appUrl_getInfoByUs = this.APIUrl.API.api.getInfoByUs;
-        this.$axios.post(appUrl_getInfoByUs,{ 
+        // let appUrl_getInfoByUs = this.APIUrl.API.api.getInfoByUs;
+        this.$axios.post('/blog/getInfoByUs',{ 
             us: this.userName
         }).then(res=>{
             if(res.data.err == 0){

@@ -7,26 +7,38 @@ import EditBlog from '../views/user/EditBlog'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    // meta:{
+    //   title: '波伟|个人博客'
+    // }
   },
   {
     path: '/Login',
     name: 'Login',
-    component: Login
+    component: Login,
+    // meta:{
+    //   title: '登录 | 注册页面'
+    // }
   },
   {
     path: '/UserCenter',
     name: 'UserCenter',
-    component: UserCenter
+    component: UserCenter,
+    // meta:{
+    //   title: '个人中心'
+    // }
   },
   {
     path: '/EditBlog',
     name: 'EditBlog',
-    component: EditBlog
+    component: EditBlog,
+    // meta:{
+    //   title: '写博客'
+    // }
   },
   {
     path: '/BlogInfo',
@@ -43,5 +55,12 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeEach((to, from, next) => {
+//   if(to.meta.title){
+//     document.title = to.meta.title
+//   }
+//   next()
+// })
 
 export default router

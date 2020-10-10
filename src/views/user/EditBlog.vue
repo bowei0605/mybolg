@@ -3,7 +3,7 @@
     <v-app-bar app color="white" elevate-on-scroll>
       <HeaderNav />
     </v-app-bar>
-    <v-row justify="center" class="mx-4 mt-10">
+    <v-row justify="center" class="mx-4 mt-16">
         <v-col cols="12" sm="8" md="7" xs="12" xl="6">
           <v-text-field label="请输入标题" solo v-model="blogTitle"></v-text-field>
           <div class="subcontainer">
@@ -57,7 +57,7 @@ export default {
     this.editor = new E("#editor"); //new即可
 
     this.editor.customConfig.uploadImgShowBase64 = false; // base 64 存储图片
-    this.editor.customConfig.uploadImgServer = this.APIUrl.API.api.blogUpload; // 配置服务器端地址
+    this.editor.customConfig.uploadImgServer = this.$axios.defaults.baseURL+'/file/upload'; // 配置服务器端地址
     this.editor.customConfig.uploadImgHeaders = {}; // 自定义 header
     this.editor.customConfig.uploadFileName = "images"; // 后端接受上传文件的参数名
     this.editor.customConfig.uploadImgMaxSize = 10 * 1024 * 1024; // 将图片大小限制为 10M
@@ -144,8 +144,8 @@ export default {
         // 这是修改
         console.log('修改博客')
       console.log(this.blogInfo)
-        let appUrl_blogUpdata = this.APIUrl.API.api.blogUpdate;
-        this.$axios.post(appUrl_blogUpdata,{
+        // let appUrl_blogUpdata = this.APIUrl.API.api.blogUpdate;
+        this.$axios.post('/blog/update',{
           _id: this.blogInfo._id,
           us: localStorage.getItem('userName'),
           blogTitle: this.blogTitle,
@@ -163,9 +163,7 @@ export default {
           console.log(err)
         })
       }else{
-        // 这是添加
-        let appUrl_blogAdd = this.APIUrl.API.api.blogAdd;
-          this.$axios.post(appUrl_blogAdd,{ 
+          this.$axios.post('/blog/add',{ 
               us: localStorage.getItem('userName'), 
               blogTitle: this.blogTitle,
               blogContent: this.editor.txt.html(),

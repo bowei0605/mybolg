@@ -22,7 +22,8 @@
       blogList: [],
     }),
     mounted () {
-      this.getAllBlogs()
+      this.getAllBlogs();
+      
     },
     filters:{
       timeFilters(value){
@@ -32,22 +33,53 @@
     methods: {
       goBlogInfo(blogId){
         this.$router.push('./BlogInfo?id=' + blogId)
+        // console.log('/BlogInfo?id=' + blogId)
+        // let href = this.$router.push({
+        //   path: '/BlogInfo?id=' + blogId
+        // })
+        // void(window.open(href, '_new'));
+
+        // let routeData = this.$router.resolve({
+        //   path: '/BlogInfo?id=' + blogId,
+        // });
+        // window.open(routeData.href, '_blank');
+
       },
+
       getAllBlogs(){
-        let appUrl_getAllBlogs =  this.APIUrl.API.api.blogGetInfoByPage
-        this.$axios.post(appUrl_getAllBlogs,{
-            pageSize: 20,
-            page: 1
-        }).then(res=>{
-            if(res.data.err == 0){
-              this.blogList = res.data.list
-              // console.log(res.data.list)
-            }else{
-              alert(res.data.msg)
-            }
-        }).catch(err=>{
-            console.log(err)
+
+      //   let appUrl_getAllBlogs =  this.APIUrl.API.api.blogGetInfoByPage
+      //   this.$axios.post(appUrl_getAllBlogs,{
+      //       pageSize: 20,
+      //       page: 1
+      //   }).then(res=>{
+      //       if(res.data.err == 0){
+      //         this.blogList = res.data.list
+      //         this.blogList.reverse()
+      //       }else{
+      //         alert(res.data.msg)
+      //       }
+      //   }).catch(err=>{
+      //       console.log(err)
+      //   })
+      // }
+
+        this.$axios.post('/blog/getInfoByPage', {
+          pageSize: 20,
+          page: 1
         })
+        .then(res => {
+          if(res.data.err == 0){
+            this.blogList = res.data.list
+            this.blogList.reverse()
+          }else{
+            alert(res.data.msg)
+          }
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+
       }
     }
   }
