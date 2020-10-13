@@ -3,12 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-import api from './api/api'
 import axios from 'axios'
 
-// Vue.prototype.APIUrl=api;
 
 Vue.prototype.$axios = axios
+// axios.defaults.baseURL = 'http://192.168.3.22:3000'
 axios.defaults.baseURL = 'https://www.bowei.xyz:3000'
 
 Vue.config.productionTip = false

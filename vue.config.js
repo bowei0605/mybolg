@@ -9,8 +9,6 @@ module.exports = {
   devServer: {
     port: 4000,
     hotOnly: true,
-    // host: 'https://192.168.3.22',
-    https: true
   },
   productionSourceMap: false,
   configureWebpack: {

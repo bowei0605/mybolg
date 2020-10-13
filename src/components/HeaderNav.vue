@@ -28,7 +28,7 @@ export default {
     filters: {
         formatUserName: function (value) {
             value = value.split('@')
-            console.log(value)
+            // console.log(value)
             return value[0]
         }
     },

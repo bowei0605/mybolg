@@ -5,17 +5,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isBlogInfo: false,
+    isBlogInfo: {
+      blogContent:'',
+      blogTitle: ''
+    },
   },
   
   mutations: {
     //
+    goBlogInfo(state,blogContent,blogTitle){
+      state.isBlogInfo.blogContent = blogContent
+      state.isBlogInfo.blogTitle = blogTitle
+    },
   },
 
   actions: {
-    goBlogInfo(index){
-      this.state.isBlogInfo = index
-    },
+
   },
 
   modules: {

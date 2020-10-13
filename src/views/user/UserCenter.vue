@@ -10,7 +10,7 @@
                 <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3">
                   <v-hover v-slot:default="{ hover }" >
                     <v-card :elevation="hover ? 6 : 2">
-                        <v-card-title class="primary--text" v-html="item.blogTitle" @click="goBlogInfo(item)"></v-card-title>
+                        <v-card-title class="primary--text text--darken-2 body-1" v-html="item.blogTitle" @click="goBlogInfo(item)"></v-card-title>
                         <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0"></v-card-subtitle>
                         <v-card-actions class="justify-space-between mr-3">
                             <v-btn text>Listen Now</v-btn>
@@ -59,7 +59,6 @@ import HeaderNav from '@/components/HeaderNav'
     methods: {
       // 获取用户信息
       getUserInfo(){
-        //  let appUrl_getUserInfo = this.APIUrl.API.api.userGetInfo;
          this.$axios.post('/user/userGetInfo',{
            us: this.userName
          }).then(res =>{
@@ -91,9 +90,15 @@ import HeaderNav from '@/components/HeaderNav'
       },
 
       // 前往博客详情页
-      goBlogInfo(item){
-        var blogId = item._id
-        this.$router.push('./BlogInfo?id=' + blogId)
+      goBlogInfo(blog){
+        // var blogId = item._id
+        // this.$router.push('./BlogInfo?id=' + blogId)
+
+        this.$router.push('./BlogInfo?id=' + blog._id);
+        this.$store.commit('goBlogInfo',{
+          blogContent: blog.blogContent,
+          blogTitle: blog.blogTitle
+        })
       },
 
       // 前往编辑博客

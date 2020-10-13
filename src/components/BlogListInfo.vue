@@ -8,8 +8,8 @@
             <div class="body-2">{{blogInfo.updateTime | timeFilters}}</div>
             <div @click="deleteBlogDialog=true"  v-if="isAdmin">删除文章</div>
         </div>
-        <div class="text-h6 mb-4 mt-2">{{blogInfo.blogTitle}}</div>
-        <div v-html="blogInfo.blogContent"></div>
+        <div class="primary--text text--darken-2 text-h6 mb-4 mt-2 ">{{ $store.state.isBlogInfo == ''?$store.state.isBlogInfo.blogTitle:blogInfo.blogTitle}}</div>
+        <div v-html="$store.state.isBlogInfo == ''? $store.state.isBlogInfo.blogContent:blogInfo.blogContent" class="blogContent"></div>
 
         <div class="mt-12">
             <div class="mb-4 d-flex justify-center" v-if="!userName">
@@ -83,7 +83,6 @@ export default {
     methods: {
         // 获取博客的详细信息
         getBlogInfo(){
-            // let apiUrl_getBlogInfo = this.APIUrl.API.api.blogGetById
             
             this.$axios.post('/blog/getBlogById',{
                 _id : this.$route.query.id
@@ -149,15 +148,12 @@ export default {
 
         // 查询评论
         getComment(){
-            // let apiUrl_getComment = this.APIUrl.API.api.getComment
-            // console.log(this.blogInfo)
             this.$axios.post('/comment/getInfoById', {
                 blogId: this.$route.query.id
             }).then(res => {
                 if(res.data.err == 0){
                     this.commentInfo = res.data.list
                     this.commentInfo.reverse()
-                    console.log(res.data.list)
                 }
             }).catch(err => {
                 console.log('内部错误')
@@ -176,3 +172,10 @@ export default {
     },
 }
 </script>
+
+<style>
+    .blogContent img{
+        width: 100%;
+        border-radius: 10px;
+    }
+</style>

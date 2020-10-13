@@ -35,6 +35,10 @@
             </div>
         </div>
 
+        <!-- <div class="d-none d-xs-flex loginDivMob">
+            
+        </div> -->
+
         <v-dialog v-model="dialog" max-width="290" persistent>
             <v-card>
                 <div class="body-1 text-center py-6 grey--text text--darken-2" v-text="dialogText"></div>
@@ -182,7 +186,6 @@ export default {
                     this.dialog = true
                     this.dialogText = '验证码错误'
                 }
-                // console.log(res.data)
             }).catch(err=>{
                 console.log(err)
             })
@@ -190,22 +193,20 @@ export default {
         
         // 注册页面
         reg(){
-            //userReg
-            // let appUrl_reg = this.APIUrl.API.api.userReg;
-            this.$axios.post('/user/Reg',{
-                us: this.userName,
-                ps: this.userPwd
+            this.$axios.post('/user/Reg',{      // 请求的方法，请求的接口
+                us: this.userName,              // 参数
+                ps: this.userPwd                // 参数
             }).then(res=>{
                 if(res.data.err == 0){
-                    this.login()
+                    this.login()                // 注册成功之后该执行的函数
                 }else{
-                    console.log('注册失败')
+                    console.log('注册失败')     // 注册失败执行的函数
                 }
-                console.log(res.data)
             }).catch(err=>{
-                console.log(err)
+                console.log(err)                // 发生错误执行的函数
             })
-        }
+        },
+        
     }
 
 }
@@ -228,5 +229,12 @@ export default {
     background: #00000080;
     padding-top: 120px;
     padding-left: 50px;
+}
+
+.loginDivMob{
+    height: 100vh;
+    width: 100vw;
+    background: url('../../assets/images/bg.jpg') no-repeat;
+    background-size: cover;
 }
 </style>

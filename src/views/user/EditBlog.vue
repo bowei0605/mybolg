@@ -7,7 +7,7 @@
         <v-col cols="12" sm="8" md="7" xs="12" xl="6">
           <v-text-field label="请输入标题" solo v-model="blogTitle"></v-text-field>
           <div class="subcontainer">
-            <div class="editor" id="editor" ref="editor" v-highlight></div>
+            <div class="editor" id="editor" ref="editor"></div>
             <v-btn @click="submitBlog()" width="120px" rounded color="primary" class="mt-7">提交</v-btn>
           </div>
         </v-col>
@@ -113,7 +113,7 @@ export default {
         console.log('Image upload timeout')
       },
       customInsert: (insertImg, result, editor) => {
-        var url = this.APIUrl.API.api.hostIp + result.images[0]
+        var url = this.$axios.defaults.baseURL + result.images[0]
         insertImg(url)
         console.log("url:", url)
         console.log('insertImg：', insertImg)
@@ -188,7 +188,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .subcontainer {
   height: 100%;
   width: 100%;
@@ -201,6 +201,10 @@ export default {
   width: 100%;
   height: 300px;
   margin-bottom: 40px;
+}
+.w-e-text img{
+    width: 500px;
+    border-radius: 20px;
 }
 .a-btn {
   padding-bottom: 80px;
