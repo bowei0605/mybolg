@@ -46,12 +46,19 @@ const routes = [
     component: function () {
       return import('../views/BlogInfo.vue')
     }
+  },
+  {
+    path: '/EditUserInfo',
+    name: 'EditUserInfo',
+    component: function () {
+      return import('../views/user/EditUserInfo.vue')
+    }
   }
 ]
 
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

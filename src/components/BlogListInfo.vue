@@ -111,7 +111,6 @@ export default {
 
         // 删除博客
         delBlog(){
-            // let apiUrl_delBlog = this.APIUrl.API.api.blogDel
             this.$axios.post('/blog/del',{
                 _id: this.blogInfo._id
             }).then(res=>{
@@ -128,7 +127,6 @@ export default {
 
         // 发表评论
         publishComment(){
-            // let apiUrl_publishComment = this.APIUrl.API.api.commentPublish
             this.$axios.post('/comment/publish', {
                 us: this.userName,
                 blogId: this.$route.query.id,

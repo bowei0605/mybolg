@@ -3,31 +3,19 @@
         <v-card class="mx-auto mt-4">
             <v-card-subtitle class="pb-3 title">我的信息</v-card-subtitle>
             <v-card-text class="text--primary">
-                <div class="mb-2">网名：小诸葛</div>
-                <div class="mb-2">职位：前端攻城狮</div>
+                <div class="mb-2">昵称：小诸葛</div>
+                <div class="mb-2">职位：攻城狮</div>
                 <div class="mb-2">现居：广东深圳</div>
-                <div class="mb-2">Email：bowei0605@163.com</div>
+                <div class="mb-2">Email：bowei605@gmail.com</div>
                 <div class="mb-2">QQ：2504779552</div>
             </v-card-text>
         </v-card>
-        <!-- <v-card class="mx-auto my-8">
-            <v-card-subtitle class="pb-3 title">热门文章</v-card-subtitle>
-            <v-card-text class="text--primary">
-                <div class="mb-2 blogListClass" v-for="(item,index) in blogList" :key="index">
-                    <v-hover v-slot:default="{ hover }">
-                        <div :class="hover ? 'primary--text font-weight-bold' : ''">
-                            <span class="primary--text font-weight-bold font-italic pr-1">{{index+1}}.</span>{{item.title}}
-                        </div>
-                    </v-hover>
-                </div>
-            </v-card-text>
-        </v-card> -->
         <v-card class="mx-auto my-8">
             <v-card-subtitle class="pb-3 title">最新文章</v-card-subtitle>
             <v-card-text class="text--primary">
                 <div class="mb-2 blogListClass" v-for="(item,index) in blogList" :key="index">
                     <v-hover v-slot:default="{ hover }">
-                        <div :class="hover ? 'primary--text font-weight-bold' : ''">
+                        <div :class="hover ? 'primary--text font-weight-bold' : ''" class=" text-truncate">
                             <span class="primary--text font-weight-bold font-italic pr-1">{{index+1}}.</span>{{item.blogTitle}}
                         </div>
                     </v-hover>
@@ -41,11 +29,13 @@
     export default{
         data(){
             return{
-                blogList:[]
+                blogList:[],
+                user:{}
             }
         },
         mounted () {
             this.getBlogListNewest()
+            this.getUserInfo()
         },
         methods:{
             // 获取最新博客
@@ -53,10 +43,25 @@
                 this.$axios.get('/blog/getInfoByTime')
                 .then(res =>{
                     if(res.data.err == 0){
-                        this.blogList = res.data.list
+                        this.blogList = res.data.list.slice(0,8)
+                        console.log(res.data.list)
                     }
                 }).catch(err => {
                     console.log('获取信息失败')
+                })
+            },
+
+            // 获取用户信息
+            getUserInfo(){
+                console.log(localStorage.getItem('userName'), localStorage.getItem('_id'))
+                this.$axios.post('/user/userGetInfo', {
+                    us: localStorage.getItem('userName'),
+                    _id: localStorage.getItem('_id')
+                }).then(res => {
+                    this.user = res.data.list[0]
+                    this.user.sex = String(this.user.sex)
+                }).catch(err => {
+                    console.log(err)
                 })
             }
         },

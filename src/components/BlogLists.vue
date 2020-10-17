@@ -1,10 +1,10 @@
 <template>
   <div>
       <v-row dense class="mx-auto">
-        <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" >
+        <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3"  @click="goBlogInfo(item)">
           <v-hover v-slot:default="{ hover }" >
             <v-card :elevation="hover ? 6 : 2">
-                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1" @click="goBlogInfo(item)"></v-card-title>
+                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1"></v-card-title>
                 <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
                 <v-card-actions class="justify-space-between mr-3">
                   <v-btn text>Listen Now</v-btn>
@@ -30,6 +30,7 @@
       }
     },
     methods: {
+      // 博客详情
       goBlogInfo(blog){
         this.$router.push('./BlogInfo?id=' + blog._id);
         this.$store.commit('goBlogInfo',{
@@ -38,8 +39,8 @@
         })
       },
 
+      // 获取所有博客
       getAllBlogs(){
-
         this.$axios.post('/blog/getInfoByPage', {
           pageSize: 20,
           page: 1

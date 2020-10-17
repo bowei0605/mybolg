@@ -116,15 +116,14 @@ export default {
 
         // 登录页面
         login(){
-            // let appUrl_login = this.APIUrl.API.api.userLogin;
             this.$axios.post('/user/login',{
                 us: this.userName,
                 ps: this.userPwd
             }).then(res=>{
                 if(res.data.err == 0){
                     localStorage.setItem('userName', this.userName)
+                    localStorage.setItem('_id', res.data.list[0]._id)
                     this.$router.replace('/UserCenter')
-                    console.log('登录成功')
                 }else{
                     this.dialog = true
                     this.dialogText = res.data.msg
@@ -137,8 +136,6 @@ export default {
 
         // 发送邮箱验证码
         sendCode(){
-
-            // let appUrl_getCode = this.APIUrl.API.api.userGetMailCode;
             this.$axios.post('/user/getMailCode',{
                 mail: this.userName
             }).then(res=>{
@@ -173,8 +170,6 @@ export default {
 
         // 校验 验证码页面
         verCode(){
-            //userGetVerCode
-            // let appUrl_verCode = this.APIUrl.API.api.userGetVerCode;
             this.$axios.post('/user/verCode',{
                 us: this.userName,
                 code: this.code
@@ -195,7 +190,8 @@ export default {
         reg(){
             this.$axios.post('/user/Reg',{      // 请求的方法，请求的接口
                 us: this.userName,              // 参数
-                ps: this.userPwd                // 参数
+                ps: this.userPwd,               // 参数
+                code: this.code
             }).then(res=>{
                 if(res.data.err == 0){
                     this.login()                // 注册成功之后该执行的函数

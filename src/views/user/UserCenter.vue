@@ -7,10 +7,10 @@
           <v-col cols="12" sm="7" md="7" xs="12" xl="6">
             <div v-if="blogList.length == 0" class="primary--text"> 你暂时还没写博客哦 </div>
             <v-row dense class="mx-auto">
-                <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3">
+                <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item)">
                   <v-hover v-slot:default="{ hover }" >
                     <v-card :elevation="hover ? 6 : 2">
-                        <v-card-title class="primary--text text--darken-2 body-1" v-html="item.blogTitle" @click="goBlogInfo(item)"></v-card-title>
+                        <v-card-title class="primary--text text--darken-2 body-1" v-html="item.blogTitle"></v-card-title>
                         <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0"></v-card-subtitle>
                         <v-card-actions class="justify-space-between mr-3">
                             <v-btn text>Listen Now</v-btn>
@@ -22,13 +22,16 @@
             </v-row>
           </v-col>
           <v-col cols="0" sm="5" md="3" xs="0" xl="2">
-              <v-card class="mx-auto">
-                  <v-card-subtitle class="pb-3 title">个人中心</v-card-subtitle>
+              <v-card class="mx-auto mt-4">
+                  <div class="d-flex justify-space-between align-center pt-4">
+                      <v-card-subtitle class="title py-0">你的资料</v-card-subtitle>
+                      <v-btn text rounded class="primary--text" @click="goEditUserInfo()">编辑资料</v-btn>
+                  </div>
                   <v-card-text class="text--primary">
-                      <div class="mb-2">网名：小诸葛</div>
-                      <div class="mb-2">职位：前端攻城狮</div>
-                      <div class="mb-2">Email：{{userInfo.us}}</div>
-                      <div class="mb-2">QQ：2504779552</div>
+                      <div class="mb-2">昵称：{{ user.nickName || "网名：小诸葛"}}</div>
+                      <div class="mb-2">职位：{{ user.worker || "攻城狮"}}</div>
+                      <div class="mb-2 text-truncate">Email：{{ user.us || "name@example.com" }}</div>
+                      <div class="mb-2">个人描述：{{ user.desc || "你还没写个人描述哦" }}</div>
                   </v-card-text>
               </v-card>
           </v-col>
@@ -40,14 +43,12 @@ import HeaderNav from '@/components/HeaderNav'
   export default {
     data: () => ({
       blogList: [],
-      userName: '',
-      userInfo: []
+      user: [],
     }),
     components: {
       HeaderNav
     },
     mounted () {
-      this.userName = localStorage.getItem('userName');
       this.getBlogList();
       this.getUserInfo();
     },
@@ -60,10 +61,12 @@ import HeaderNav from '@/components/HeaderNav'
       // 获取用户信息
       getUserInfo(){
          this.$axios.post('/user/userGetInfo',{
-           us: this.userName
+           us: localStorage.getItem('userName'),
+           _id: localStorage.getItem('_id'),
          }).then(res =>{
             if(res.data.err == 0){
-              this.userInfo = res.data.list[0]
+              this.user = res.data.list[0]
+              localStorage.setItem('headerImg', res.data.list[0].headerImg)
             }
          }).catch(err => {
            console.log('获取用户失败')
@@ -72,14 +75,11 @@ import HeaderNav from '@/components/HeaderNav'
 
       // 获取博客列表
       getBlogList(){
-
-        // let appUrl_getInfoByUs = this.APIUrl.API.api.getInfoByUs;
         this.$axios.post('/blog/getInfoByUs',{ 
-            us: this.userName
+            us: localStorage.getItem('userName')
         }).then(res=>{
             if(res.data.err == 0){
               this.blogList = res.data.list
-              console.log(this.blogList)
             }else{
               alert(res.data.msg)
             }
@@ -91,9 +91,6 @@ import HeaderNav from '@/components/HeaderNav'
 
       // 前往博客详情页
       goBlogInfo(blog){
-        // var blogId = item._id
-        // this.$router.push('./BlogInfo?id=' + blogId)
-
         this.$router.push('./BlogInfo?id=' + blog._id);
         this.$store.commit('goBlogInfo',{
           blogContent: blog.blogContent,
@@ -105,6 +102,12 @@ import HeaderNav from '@/components/HeaderNav'
       goEditBlog(){
         this.$router.push('/EditBlog')
       },
+
+      // 前往编辑资料页
+      goEditUserInfo(){
+        console.log(1212)
+        this.$router.push('/EditUserInfo')
+      }
 
     }
   }
