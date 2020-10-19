@@ -39,7 +39,7 @@
         <div class="d-flex justify-center mb-16">
             <v-btn text color="primary" rounded @click="getMoreComments()"  v-if="5*page<commentInfo.length">点击查看更多评论</v-btn>
             <v-btn text color="primary" rounded @click="getMoreComments()"  v-else-if="commentInfo.length == 0">快来坐沙发吧</v-btn>
-            <v-btn text color="primary" rounded v-else-if="commentInfo.length<5">没有更多了</v-btn>
+            <v-btn text color="primary" rounded v-else-if="commentInfo.length<5">我也是有底线的！</v-btn>
             <v-btn text color="primary" rounded @click="showMoreComments()" v-else>收起评论</v-btn>
         </div>
 
@@ -64,9 +64,9 @@ export default {
             deleteBlogDialog: false,
             userName:'',
             commentContent:'',
-
             commentInfo:'',
             page: 1,
+            _id: ''
         }
     },
     filters:{
@@ -80,6 +80,11 @@ export default {
         this.getBlogInfo()
         this.getComment()
     },
+    watch: {
+        '$route'(to, from){
+            this.getBlogInfo()
+        }
+    },
     methods: {
         // 获取博客的详细信息
         getBlogInfo(){
@@ -89,6 +94,7 @@ export default {
             }).then(res => {
                 if(res.data.err == 0){
                     this.blogInfo = res.data.list[0]
+                    console.log(this.blogInfo)
                     if(!localStorage.getItem('userName')) return;
                     if(localStorage.getItem('userName') == this.blogInfo.us){
                         this.isAdmin = true

@@ -1,10 +1,10 @@
 <template>
   <div>
       <v-row dense class="mx-auto">
-        <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3"  @click="goBlogInfo(item)">
-          <v-hover v-slot:default="{ hover }" >
+        <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item)" style="cursor:pointer">
+          <v-hover v-slot:default="{ hover }">
             <v-card :elevation="hover ? 6 : 2">
-                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1"></v-card-title>
+                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1 text-truncate mr-6"></v-card-title>
                 <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
                 <v-card-actions class="justify-space-between mr-3">
                   <v-btn text>Listen Now</v-btn>
@@ -56,8 +56,11 @@
         .catch(err=>{
           console.log(err)
         })
+      },
 
-      }
+      // 获取评论
+
+      
     }
   }
 </script>

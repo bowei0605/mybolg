@@ -7,7 +7,7 @@
           <v-col cols="12" sm="7" md="7" xs="12" xl="6">
             <div v-if="blogList.length == 0" class="primary--text"> 你暂时还没写博客哦 </div>
             <v-row dense class="mx-auto">
-                <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item)">
+                <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item)" style="cursor:pointer">
                   <v-hover v-slot:default="{ hover }" >
                     <v-card :elevation="hover ? 6 : 2">
                         <v-card-title class="primary--text text--darken-2 body-1" v-html="item.blogTitle"></v-card-title>
@@ -28,7 +28,7 @@
                       <v-btn text rounded class="primary--text" @click="goEditUserInfo()">编辑资料</v-btn>
                   </div>
                   <v-card-text class="text--primary">
-                      <div class="mb-2">昵称：{{ user.nickName || "网名：小诸葛"}}</div>
+                      <div class="mb-2">昵称：{{ user.nickName || "小诸葛"}}</div>
                       <div class="mb-2">职位：{{ user.worker || "攻城狮"}}</div>
                       <div class="mb-2 text-truncate">Email：{{ user.us || "name@example.com" }}</div>
                       <div class="mb-2">个人描述：{{ user.desc || "你还没写个人描述哦" }}</div>

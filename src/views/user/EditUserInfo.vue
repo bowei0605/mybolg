@@ -6,9 +6,9 @@
         <v-row justify="center" class="mx-4">
             <v-col cols="12" sm="10" md="10" xs="12" xl="6">
                 <div class="d-flex align-center mb-4">
-                    <img :src="user.headerImg?this.$axios.defaults.baseURL+user.headerImg:require('../../assets/images/head.jpg')" alt="头像" class="imgHead mr-10">
-                        <v-btn outlined rounded color="primary" @click="chooseImg()">更换头像</v-btn>
-                        <input type="file" ref="filElem" style="width:0;" @change="UploadHeaderImg()">
+                    <v-img :src="user.headerImg?this.$axios.defaults.baseURL+user.headerImg:require('../../assets/images/head.jpg')" alt="头像" style="border-radius: 50%;" class="mr-10" max-width="120px" />
+                    <v-btn outlined rounded color="primary" @click="chooseImg()">更换头像</v-btn>
+                    <input type="file" ref="filElem" style="width:0;" @change="UploadHeaderImg()">
                 </div>
                 <div class="d-flex mt-10">
                     <v-subheader class="body-1 pl-0">昵称：</v-subheader>
@@ -37,6 +37,29 @@
                 <v-btn rounded color="primary" dense width="100" @click="updateUserInfo()">保存</v-btn>
             </v-col>
         </v-row>
+        <v-snackbar v-model="snackbar" :timeout="timeout">
+            {{ snackbarText }}
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+                >
+                关闭
+                </v-btn>
+            </template>
+        </v-snackbar>
+        <!-- <v-snackbar v-model="snackbar" :timeout="timeout">
+                {{ snackbarText }}
+                <v-btn color="blue" text @click="snackbar = false"> 关闭 </v-btn>
+
+                <v-snackbar
+                v-model="snackbar"
+                :timeout="timeout"
+                >
+        </v-snackbar> -->
     </v-main>
 </template>
 <script>
@@ -51,6 +74,9 @@ export default {
             user:{
                 sex: "1",
             },
+            timeout: 2000,
+            snackbar: false,
+            snackbarText: '',
         }
     },
     components: {
@@ -65,7 +91,6 @@ export default {
             }).then(res => {
                 this.user = res.data.list[0]
                 this.user.sex = String(this.user.sex)
-                console.log(this.user)
             }).catch(err => {
                 console.log(err)
             })
@@ -73,6 +98,7 @@ export default {
 
         // 更新个人博客
         updateUserInfo(){
+            this.snackbar = true
             this.$axios.post('/user/update',{
                 us: this.user.us,
                 _id: localStorage.getItem('_id'),
@@ -83,12 +109,12 @@ export default {
                 headerImg: this.user.headerImg
             }).then(res => {
                 if(res.data.err == 0){
-                    console.log(res.data+"修改成功")
+                    this.snackbarText = res.data.msg
                 }else{
-                    console.log(res.data+"修改失败")
+                    this.snackbarText = res.data.msg
                 }
             }).catch(err => {
-                console.log('修改失败')
+                this.snackbarText = '内部错误'
             })
         },
 
@@ -120,11 +146,4 @@ export default {
     }
 }
 </script>
-<style scoped>
-.imgHead{
-    width: 100px;
-    border-radius: 50%
-}
-</style>
-
 
