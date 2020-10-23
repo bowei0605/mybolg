@@ -4,11 +4,11 @@
         <v-col v-for="(item, i) in blogList" :key="i" cols="12" class="my-3" @click="goBlogInfo(item)" style="cursor:pointer">
           <v-hover v-slot:default="{ hover }">
             <v-card :elevation="hover ? 6 : 2">
-                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1 text-truncate mr-6"></v-card-title>
-                <v-card-subtitle v-html="item.blogContent" class="text-over no-warp blogContent ma-0 py-0"></v-card-subtitle>
-                <v-card-actions class="justify-space-between mr-3">
-                  <v-btn text>Listen Now</v-btn>
-                  <span class="body-2 grey--text">{{ item.updateTime | timeFilters }}</span>
+                <v-card-title v-text="item.blogTitle" class="primary--text text--darken-4 body-1 text-truncate mr-6 pt-4 pb-2"></v-card-title>
+                <v-card-subtitle v-html="item.blogContent" class="text-over no-warp ma-0 "></v-card-subtitle>
+                <v-card-actions class="ml-2 justify-space-between">
+                  <span class="body-2 grey--text">{{item.us}}</span>
+                  <!-- <span class="body-2 grey--text">{{ item.updateTime | timeFilters }}</span> -->
                 </v-card-actions>
             </v-card>
           </v-hover>
@@ -32,7 +32,10 @@
     methods: {
       // 博客详情
       goBlogInfo(blog){
-        this.$router.push('./BlogInfo?id=' + blog._id);
+        this.$router.push({
+          path : './BlogInfo',
+          query:{id: blog._id, us: blog.us}
+        });
         this.$store.commit('goBlogInfo',{
           blogContent: blog.blogContent,
           blogTitle: blog.blogTitle
@@ -58,8 +61,6 @@
         })
       },
 
-      // 获取评论
-
       
     }
   }
@@ -67,13 +68,49 @@
 
 <style scoped>
   .text-over{
-    text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    max-height: 20px;
+    max-height: 26px;
   }
+
+  .text-over /deep/ img{
+    display: none;
+  }
+
+  @media screen and (min-width: 960px) {
+      .text-over /deep/ img:nth-child(1) {
+        width: 150px;
+        height: 90px;
+        display: block;
+        position: absolute;
+        border-radius: 10px;
+        top: 10px;
+        right: 10px;
+      }
+
+  }
+
+
+  .text-over /deep/ p{
+    font-size: 14px !important;
+    font-weight: normal !important;
+    margin: 0;
+  }
+
+  .text-over /deep/ span{
+    font-size: 14px !important;
+    font-weight: normal !important;
+    margin: 0;
+  }
+
+  .text-over /deep/ strong{
+    font-size: 14px !important;
+    font-weight: normal !important;
+    margin: 0;
+  }
+
+  .text-over /deep/ h1+h2+h3+h4+h5{
+    font-size: 14px !important;
+    font-weight: normal !important;
+  }
+
 </style>

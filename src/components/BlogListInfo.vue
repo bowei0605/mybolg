@@ -1,13 +1,19 @@
 <template>
     <div>
-        <div class="body-1 mr-3 d-flex justify-space-between">
-            <div>{{blogInfo.us}}</div>
-            <div @click="editBlog()" class="grey--text" v-if="isAdmin">编辑文章</div>
+        <div class="d-flex justify-space-between align-center mb-5">
+            <div class="d-flex align-center">
+                <v-img :src="blogHeaderImg?this.$axios.defaults.baseURL+blogHeaderImg:require('@/assets/images/head.jpg')" alt="头像" style="border-radius: 50%;" class="mr-4" max-width="50px" height="50px" />
+                <div class="body-1">
+                    <div>{{blogInfo.us}}</div>
+                    <div  class="grey--text">{{blogInfo.updateTime | timeFilters}}</div>
+                </div>
+            </div>
+            <div class="mt-1 mr-3 mb-4 grey--text">
+                <div @click="editBlog()" class="grey--text mr-auto" v-if="isAdmin">编辑文章</div>
+                <div @click="deleteBlogDialog=true"  v-if="isAdmin">删除文章</div>
+            </div>
         </div>
-        <div class="mt-1 mr-3 mb-4 grey--text d-flex justify-space-between align-center">
-            <div class="body-2">{{blogInfo.updateTime | timeFilters}}</div>
-            <div @click="deleteBlogDialog=true"  v-if="isAdmin">删除文章</div>
-        </div>
+
         <div class="primary--text text--darken-2 text-h6 mb-4 mt-2 ">{{ $store.state.isBlogInfo == ''?$store.state.isBlogInfo.blogTitle:blogInfo.blogTitle}}</div>
         <div v-html="$store.state.isBlogInfo == ''? $store.state.isBlogInfo.blogContent:blogInfo.blogContent" class="blogContent"></div>
 
@@ -17,6 +23,7 @@
             </div>
 
             <div class="d-flex" v-else>
+                <v-img :src="userHeaderImg?$axios.defaults.baseURL+userHeaderImg:require('@/assets/images/head.jpg')" alt="头像" max-width="50" height="50" style="border-radius: 50%; margin-right: 10px" />
                 <v-text-field solo label="留下你的神评" v-model="commentContent" v-on:keyup.enter="publishComment()"></v-text-field>
                 <v-btn height="48" large color='white primary--text' @click="publishComment()">发表</v-btn>
             </div>
@@ -66,7 +73,9 @@ export default {
             commentContent:'',
             commentInfo:'',
             page: 1,
-            _id: ''
+            _id: '',
+            blogHeaderImg:'',
+            userHeaderImg:'',
         }
     },
     filters:{
@@ -77,6 +86,7 @@ export default {
     },
     mounted () {
         this.userName = localStorage.getItem('userName');
+        this.UserheaderImg = localStorage.getItem('headerImg');
         this.getBlogInfo()
         this.getComment()
     },
@@ -86,15 +96,26 @@ export default {
         }
     },
     methods: {
+
+        // 获取用户信息
+        getUserInfo(){
+            this.$axios.post('/user/userGetInfo', {
+                us: this.blogInfo.us,
+            }).then(res => {
+                this.blogHeaderImg = res.data.list[0].headerImg
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
         // 获取博客的详细信息
         getBlogInfo(){
-            
             this.$axios.post('/blog/getBlogById',{
                 _id : this.$route.query.id
             }).then(res => {
                 if(res.data.err == 0){
                     this.blogInfo = res.data.list[0]
-                    console.log(this.blogInfo)
+                    this.getUserInfo()
                     if(!localStorage.getItem('userName')) return;
                     if(localStorage.getItem('userName') == this.blogInfo.us){
                         this.isAdmin = true
@@ -157,6 +178,7 @@ export default {
             }).then(res => {
                 if(res.data.err == 0){
                     this.commentInfo = res.data.list
+                    console.log(this.commentInfo)
                     this.commentInfo.reverse()
                 }
             }).catch(err => {
@@ -169,6 +191,7 @@ export default {
             this.page ++
         },
 
+        // 收起列表
         showMoreComments(){
             this.page = 1
         }

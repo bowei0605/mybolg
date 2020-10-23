@@ -35,7 +35,6 @@
         },
         mounted () {
             this.getBlogListNewest()
-            this.getUserInfo()
         },
         methods:{
 
@@ -50,29 +49,19 @@
                     console.log('获取信息失败')
                 })
             },
-
-            // 获取用户信息
-            getUserInfo(){
-                this.$axios.post('/user/userGetInfo', {
-                    us: localStorage.getItem('userName'),
-                    _id: localStorage.getItem('_id')
-                }).then(res => {
-                    this.user = res.data.list[0]
-                    this.user.sex = String(this.user.sex)
-                }).catch(err => {
-                    console.log(err)
-                })
-            },
-
+            
             // 前往博客详情页
             goBlogInfo(blog){
-                // console.log(blog)
-                this.$router.push('./BlogInfo?id=' + blog._id);
+                this.$router.push({
+                    path : './BlogInfo',
+                    query:{id: blog._id, us: blog.us}
+                });
                 this.$store.commit('goBlogInfo',{
                     blogContent: blog.blogContent,
                     blogTitle: blog.blogTitle
                 })
             },
+
         },
     }
 </script>

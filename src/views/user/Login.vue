@@ -35,17 +35,11 @@
             </div>
         </div>
 
-        <!-- <div class="d-none d-xs-flex loginDivMob">
-            
-        </div> -->
-
         <v-dialog v-model="dialog" max-width="290" persistent>
             <v-card>
                 <div class="body-1 text-center py-6 grey--text text--darken-2" v-text="dialogText"></div>
                 <v-divider></v-divider> 
-                <v-btn color="primary" text x-large @click="dialog = false" style="width: 100%; height: 50px;">
-                    确定
-                </v-btn>
+                <v-btn color="primary" text x-large @click="dialog = false" style="width: 100%; height: 50px;">确定</v-btn>
             </v-card>
         </v-dialog>
 

@@ -1,9 +1,6 @@
 <template>
     <v-row justify="center" class="ml-4" align="center">
         <v-col cols="6" sm="8" md="7" xs="0" xl="6" class="pl-0 d-flex align-center justify-space-between">
-            <!-- <v-toolbar-title class="font-weight-black primary--text text-h5" @click="goHome()"  style="cursor:pointer">
-                BW
-            </v-toolbar-title> -->
             <img src="@/assets/images/logo.png" alt="主页" style="width: 50px; border-radius: 50%; cursor:pointer" @click="goHome()" >
         </v-col>
         
@@ -17,7 +14,7 @@
                 <v-menu open-on-hover bottom offset-y transition="slide-y-transition">
                     <template v-slot:activator="{ on, attrs }">
                         <div class="d-flex align-center"  v-bind="attrs" v-on="on">
-                            <v-img @click="goUserCenter()" :src="headerImg != 'undefined'?$axios.defaults.baseURL+headerImg:require('@/assets/images/head.jpg')" alt="头像" style="width: 40px; border-radius: 50%;" />
+                            <v-img @click="goUserCenter()" :src="headerImg?$axios.defaults.baseURL+headerImg:require('@/assets/images/head.jpg')" alt="头像" style="width: 40px; border-radius: 50%;" />
                             <v-icon size="28">mdi-menu-down</v-icon>
                         </div>
                     </template>
@@ -89,6 +86,7 @@ export default {
         exit(){
             localStorage.clear()
             this.$router.replace('/')
+            this.$router.go(0)
         }
     }
 }

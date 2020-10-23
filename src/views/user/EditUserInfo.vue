@@ -1,8 +1,5 @@
 <template>
     <v-main>
-        <v-app-bar app color="white" elevate-on-scroll>
-            <HeaderNav />
-        </v-app-bar>
         <v-row justify="center" class="mx-4">
             <v-col cols="12" sm="10" md="10" xs="12" xl="6">
                 <div class="d-flex align-center mb-4">
@@ -39,27 +36,10 @@
         </v-row>
         <v-snackbar v-model="snackbar" :timeout="timeout">
             {{ snackbarText }}
-
             <template v-slot:action="{ attrs }">
-                <v-btn
-                color="blue"
-                text
-                v-bind="attrs"
-                @click="snackbar = false"
-                >
-                关闭
-                </v-btn>
+                <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">关闭</v-btn>
             </template>
         </v-snackbar>
-        <!-- <v-snackbar v-model="snackbar" :timeout="timeout">
-                {{ snackbarText }}
-                <v-btn color="blue" text @click="snackbar = false"> 关闭 </v-btn>
-
-                <v-snackbar
-                v-model="snackbar"
-                :timeout="timeout"
-                >
-        </v-snackbar> -->
     </v-main>
 </template>
 <script>
@@ -80,7 +60,7 @@ export default {
         }
     },
     components: {
-      HeaderNav
+      HeaderNav,
     },
     methods: {
         // 获取个人信息

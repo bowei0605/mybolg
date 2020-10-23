@@ -1,8 +1,5 @@
 <template>
   <v-main>
-      <v-app-bar app color="white" elevate-on-scroll>
-        <HeaderNav />
-      </v-app-bar>
       <v-row justify="center" class="mx-4">
           <v-col cols="12" sm="7" md="7" xs="12" xl="6">
             <div v-if="blogList.length == 0" class="primary--text"> 你暂时还没写博客哦 </div>
@@ -22,31 +19,22 @@
             </v-row>
           </v-col>
           <v-col cols="0" sm="5" md="3" xs="0" xl="2">
-              <v-card class="mx-auto mt-4">
-                  <div class="d-flex justify-space-between align-center pt-4">
-                      <v-card-subtitle class="title py-0">你的资料</v-card-subtitle>
-                      <v-btn text rounded class="primary--text" @click="goEditUserInfo()">编辑资料</v-btn>
-                  </div>
-                  <v-card-text class="text--primary">
-                      <div class="mb-2">昵称：{{ user.nickName || "小诸葛"}}</div>
-                      <div class="mb-2">职位：{{ user.worker || "攻城狮"}}</div>
-                      <div class="mb-2 text-truncate">Email：{{ user.us || "name@example.com" }}</div>
-                      <div class="mb-2">个人描述：{{ user.desc || "你还没写个人描述哦" }}</div>
-                  </v-card-text>
-              </v-card>
+            <UserInfo />
           </v-col>
       </v-row>
   </v-main>
 </template>
 <script>
 import HeaderNav from '@/components/HeaderNav'
+import UserInfo from '@/components/UserInfo'
   export default {
     data: () => ({
       blogList: [],
-      user: [],
+      user: {},
     }),
     components: {
-      HeaderNav
+      HeaderNav,
+      UserInfo
     },
     mounted () {
       this.getBlogList();
@@ -66,7 +54,8 @@ import HeaderNav from '@/components/HeaderNav'
          }).then(res =>{
             if(res.data.err == 0){
               this.user = res.data.list[0]
-              localStorage.setItem('headerImg', res.data.list[0].headerImg)
+              console.log(res.data.list[0].headerImg)
+              localStorage.setItem('headerImg', res.data.list[0].headerImg || '')
             }
          }).catch(err => {
            console.log('获取用户失败')

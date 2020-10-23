@@ -1,8 +1,4 @@
 <template>
-  <div>
-    <v-app-bar app color="white" elevate-on-scroll>
-      <HeaderNav />
-    </v-app-bar>
     <v-row justify="center" class="mx-4 mt-16">
         <v-col cols="12" sm="8" md="7" xs="12" xl="6">
           <v-text-field label="请输入标题" solo v-model="blogTitle"></v-text-field>
@@ -12,24 +8,16 @@
           </div>
         </v-col>
         <v-col cols="0" sm="4" md="3" xs="0" xl="2">
-          <v-card class="mx-auto">
-              <v-card-subtitle class="pb-3 title">个人中心</v-card-subtitle>
-              <v-card-text class="text--primary">
-                  <div class="mb-2">网名：小诸葛</div>
-                  <div class="mb-2">职位：前端攻城狮</div>
-                  <div class="mb-2">现居：广东深圳</div>
-                  <div class="mb-2">Email：bowei0605@163.com</div>
-                  <div class="mb-2">QQ：2504779552</div>
-              </v-card-text>
-          </v-card>
+          <UserInfo />
         </v-col>
     </v-row>
-  </div>
 </template>
 
 <script>
 import E from "wangeditor";
 import HeaderNav from '@/components/HeaderNav'
+import UserInfo from '@/components/UserInfo'
+
 export default {
   data() {
     return {
@@ -45,7 +33,8 @@ export default {
     };
   },
   components: {
-    HeaderNav
+    HeaderNav,
+    UserInfo
   },
 
   mounted() {
