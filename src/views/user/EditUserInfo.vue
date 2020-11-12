@@ -3,7 +3,7 @@
         <v-row justify="center" class="mx-4">
             <v-col cols="12" sm="10" md="10" xs="12" xl="6">
                 <div class="d-flex align-center mb-4">
-                    <v-img :src="user.headerImg?this.$axios.defaults.baseURL+user.headerImg:require('../../assets/images/head.jpg')" alt="头像" style="border-radius: 50%;" class="mr-10" max-width="120px" />
+                    <img :src="user.headerImg?this.$axios.defaults.baseURL+user.headerImg:require('../../assets/images/head.jpg')" alt="头像" style="border-radius: 50%; width: 120px;" class="mr-10" />
                     <v-btn outlined rounded color="primary" @click="chooseImg()">更换头像</v-btn>
                     <input type="file" ref="filElem" style="width:0;" @change="UploadHeaderImg()">
                 </div>

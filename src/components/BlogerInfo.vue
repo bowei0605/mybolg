@@ -1,7 +1,11 @@
 <template>
     <v-card class="mx-auto mt-4">
         <div class="d-flex justify-space-between align-center pt-4">
-            <v-card-subtitle class="title py-0">博主信息</v-card-subtitle>
+            <v-card-subtitle class="title py-0">
+                <span>博主信息</span>
+                <v-icon v-if="blogerInfo.sex == 2" class="ml-2 mb-1 red--text text--accent-1" size="22">mdi-gender-female</v-icon>
+                <v-icon color='primary' class="ml-2" v-else-if="blogerInfo.sex == 1" size="20">mdi-gender-male</v-icon>
+            </v-card-subtitle>
             <v-btn text rounded class="primary--text" @click="goEditUserInfo()" v-if="$route.query.us == user">编辑资料</v-btn>
         </div>
         <v-card-text class="text--primary">
@@ -34,18 +38,20 @@ export default {
     methods: {
         // 获取用户信息
         getUserInfo(){
-            console.log(this.$route.query.us)
             this.$axios.post('/user/userGetInfo',{
                 us : this.$route.query.us,
             }).then(res =>{
             if(res.data.err == 0){
+                console.log(res.data)
                 this.blogerInfo = res.data.list[0]
-                console.log(res.data.list[0].headerImg)
-                localStorage.setItem('headerImg', res.data.list[0].headerImg || '')
             }
             }).catch(err => {
                 console.log('获取用户失败')
             })
+        },
+        // 前往编辑资料
+        goEditUserInfo(){
+            this.$router.push('/EditUserInfo')
         },
     }
 }

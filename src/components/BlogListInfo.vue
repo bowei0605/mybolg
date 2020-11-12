@@ -2,7 +2,7 @@
     <div>
         <div class="d-flex justify-space-between align-center mb-5">
             <div class="d-flex align-center">
-                <v-img :src="blogHeaderImg?this.$axios.defaults.baseURL+blogHeaderImg:require('@/assets/images/head.jpg')" alt="头像" style="border-radius: 50%;" class="mr-4" max-width="50px" height="50px" />
+                <img :src="blogHeaderImg?this.$axios.defaults.baseURL+blogHeaderImg:require('@/assets/images/head.jpg')" alt="头像" style="border-radius: 50%;" class="mr-4" max-width="50px" height="50px" />
                 <div class="body-1">
                     <div>{{blogInfo.us}}</div>
                     <div  class="grey--text">{{blogInfo.updateTime | timeFilters}}</div>
@@ -23,7 +23,7 @@
             </div>
 
             <div class="d-flex" v-else>
-                <v-img :src="userHeaderImg?$axios.defaults.baseURL+userHeaderImg:require('@/assets/images/head.jpg')" alt="头像" max-width="50" height="50" style="border-radius: 50%; margin-right: 10px" />
+                <img :src="userHeaderImg?$axios.defaults.baseURL+userHeaderImg:require('@/assets/images/head.jpg')" alt="头像" max-width="50" height="50" style="border-radius: 50%; margin-right: 10px" />
                 <v-text-field solo label="留下你的神评" v-model="commentContent" v-on:keyup.enter="publishComment()"></v-text-field>
                 <v-btn height="48" large color='white primary--text' @click="publishComment()">发表</v-btn>
             </div>
@@ -86,7 +86,7 @@ export default {
     },
     mounted () {
         this.userName = localStorage.getItem('userName');
-        this.UserheaderImg = localStorage.getItem('headerImg');
+        this.userHeaderImg = localStorage.getItem('headerImg');
         this.getBlogInfo()
         this.getComment()
     },

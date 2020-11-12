@@ -2,7 +2,9 @@
     <v-card class="mx-auto mt-4">
         <div class="d-flex justify-space-between align-center pt-4">
             <v-card-subtitle class="title py-0">你的资料</v-card-subtitle>
-            <v-btn text rounded class="primary--text" @click="goEditUserInfo()">编辑资料</v-btn>
+            <v-btn text rounded class="primary--text" @click="goEditUserInfo()">
+                <span>编辑资料</span>
+            </v-btn>
         </div>
         <v-card-text class="text--primary">
             <div class="mb-2">昵称：{{ user.nickName || "小诸葛"}}</div>
@@ -36,6 +38,11 @@ export default {
             }).catch(err => {
                 console.log('获取用户失败')
             })
+        },
+
+        // 前往编辑资料
+        goEditUserInfo(){
+            this.$router.push('/EditUserInfo')
         },
     }
 }

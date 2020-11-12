@@ -46,6 +46,7 @@ export default {
         this.$nextTick(() => {
             this.userName = localStorage.getItem('userName');
             this.headerImg = localStorage.getItem('headerImg');
+            console.log(this.headerImg)
         });
         
     },

@@ -131,9 +131,6 @@ export default {
       // 判断是修改还是添加
       if(this.$route.params.blogInfo){
         // 这是修改
-        console.log('修改博客')
-      console.log(this.blogInfo)
-        // let appUrl_blogUpdata = this.APIUrl.API.api.blogUpdate;
         this.$axios.post('/blog/update',{
           _id: this.blogInfo._id,
           us: localStorage.getItem('userName'),
@@ -141,7 +138,6 @@ export default {
           blogContent: this.editor.txt.html()
         }).then(res =>{
           if(res.data.err == 0){
-              console.log('修改成功')
               this.blogTitle = ''
               this.editor.txt.html("");
               this.$router.go(-1)
@@ -158,14 +154,12 @@ export default {
               blogContent: this.editor.txt.html(),
           }).then(res=>{
               if(res.data.err == 0){
-                  console.log('添加成功')
                   this.blogTitle = ''
                   this.editor.txt.html("");
                   this.$router.go(-1)
               }else{
                   alert(res.data.msg)
               }
-              console.log(res.data)
           }).catch(err=>{
               console.log(err)
         })
